@@ -49,12 +49,6 @@ resource "aws_security_group" "allow_inbound_vpc" {
     self      = true
   }
 
-    ingress {
-    from_port = 80
-    to_port   = 80
-    protocol  = "tcp"
-    cidr_blocks = [data.aws_vpc.vpc.cidr_block]
-  }
 
   egress {
     from_port = 0
