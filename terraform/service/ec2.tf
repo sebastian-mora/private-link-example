@@ -21,14 +21,14 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "example_instance" {
   ami                    = data.aws_ami.ubuntu.image_id
   instance_type          = "t2.micro" # Change the instance type if needed
-  vpc_security_group_ids = [aws_security_group.example_sg.id]
+  vpc_security_group_ids = [aws_security_group.allow_inbound_vpc.id]
   subnet_id              = var.subnet_ids[0]
 
   user_data = <<-EOF
               #!/bin/bash
-              apt-get update
-              apt-get install -y nginx
-              service nginx start
+              sudo apt update
+              sudo apt install -y nginx
+              sudo systemctl start nginx
               EOF
 
   tags = {
@@ -37,15 +37,30 @@ resource "aws_instance" "example_instance" {
 }
 
 
-resource "aws_security_group" "example_sg" {
-  name        = "example_sg"
+resource "aws_security_group" "allow_inbound_vpc" {
+  name        = "allow_inbound_vpc"
   description = "Allow traffic on 8080"
   vpc_id      = var.vpc_id
 
   ingress {
-    from_port = 8080
-    to_port   = 8080
+    from_port = 80
+    to_port   = 80
     protocol  = "tcp"
     self      = true
   }
+
+    ingress {
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
+    cidr_blocks = [data.aws_vpc.vpc.cidr_block]
+  }
+
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 }

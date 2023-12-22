@@ -2,7 +2,7 @@ resource "aws_lb" "example_alb" {
   name               = "example-alb"
   internal           = true
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.example_sg.id, aws_security_group.allow_inbound_vpc.id]
+  security_groups    = [aws_security_group.allow_inbound_vpc_http.id, aws_security_group.allow_inbound_vpc.id]
   subnets            = var.subnet_ids
 
   enable_http2                     = true
@@ -30,8 +30,8 @@ resource "aws_lb_listener" "front_end" {
   }
 }
 
-resource "aws_security_group" "allow_inbound_vpc" {
-  name        = "example_sg"
+resource "aws_security_group" "allow_inbound_vpc_http" {
+  name        = "allow_inbound_vpc_http"
   description = "Allow traffic on 8080"
   vpc_id      = var.vpc_id
 
