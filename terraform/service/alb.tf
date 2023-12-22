@@ -61,7 +61,7 @@ resource "aws_lb_listener_rule" "example_listener_rule" {
 
   condition {
     path_pattern {
-      values = [ "/" ]
+      values = ["/"]
     }
   }
 }
