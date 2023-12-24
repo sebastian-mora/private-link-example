@@ -1,8 +1,8 @@
-resource "aws_lb" "example_alb" {
-  name               = "example-alb"
+resource "aws_lb" "hello_world" {
+  name               = "hello-world-alb"
   internal           = true
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.allow_inbound_vpc_http.id, aws_security_group.allow_inbound_vpc.id]
+  security_groups    = [aws_security_group.allow_inbound_80_self.id]
   subnets            = var.subnet_ids
 
   enable_http2                     = true
@@ -16,8 +16,8 @@ resource "aws_lb" "example_alb" {
 
 
 // create target group
-resource "aws_lb_target_group" "example_target_group" {
-  name     = "priavate-service"
+resource "aws_lb_target_group" "hello_world" {
+  name     = "hello-world-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
@@ -28,35 +28,21 @@ resource "aws_lb_target_group" "example_target_group" {
 }
 
 // register instance to target group
-resource "aws_lb_target_group_attachment" "example_target_group_attachment" {
-  target_group_arn = aws_lb_target_group.example_target_group.arn
+resource "aws_lb_target_group_attachment" "hello_world" {
+  target_group_arn = aws_lb_target_group.hello_world.arn
   target_id        = aws_instance.example_instance.id
   port             = 80
 }
 
 // create alb listener 
-resource "aws_lb_listener" "example_listener" {
-  load_balancer_arn = aws_lb.example_alb.arn
+resource "aws_lb_listener" "hello_world" {
+  load_balancer_arn = aws_lb.hello_world.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.example_target_group.arn
+    target_group_arn = aws_lb_target_group.hello_world.arn
     type             = "forward"
   }
 }
 
-
-resource "aws_security_group" "allow_inbound_vpc_http" {
-  name        = "allow_inbound_vpc_http"
-  description = "Allow traffic on 8080"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.vpc.cidr_block]
-  }
-
-}

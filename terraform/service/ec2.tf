@@ -18,7 +18,7 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-resource "aws_instance" "example_instance" {
+resource "aws_instance" "hello_world" {
   ami                    = data.aws_ami.ubuntu.image_id
   instance_type          = "t2.micro" # Change the instance type if needed
   vpc_security_group_ids = [aws_security_group.allow_inbound_vpc.id]
@@ -37,7 +37,7 @@ resource "aws_instance" "example_instance" {
 }
 
 
-resource "aws_security_group" "allow_inbound_vpc" {
+resource "aws_security_group" "allow_inbound_80_self" {
   name        = "allow_inbound_vpc"
   description = "Allow traffic on 8080"
   vpc_id      = var.vpc_id

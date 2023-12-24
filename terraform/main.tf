@@ -27,3 +27,7 @@ module "priavate-link" {
   ]
 
 }
+
+output "private_link_service_name" {
+  value = module.priavate-link.service_name
+}
