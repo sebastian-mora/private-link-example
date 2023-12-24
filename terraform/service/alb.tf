@@ -14,21 +14,6 @@ resource "aws_lb" "example_alb" {
 }
 
 
-resource "aws_lb_listener" "front_end" {
-  load_balancer_arn = aws_lb.example_alb.arn
-  port              = "80"
-  protocol          = "HTTP"
-
-  default_action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Fixed response content"
-      status_code  = "200"
-    }
-  }
-}
 
 // create target group
 resource "aws_lb_target_group" "example_target_group" {
@@ -49,22 +34,18 @@ resource "aws_lb_target_group_attachment" "example_target_group_attachment" {
   port             = 80
 }
 
-// create listener rule
-resource "aws_lb_listener_rule" "example_listener_rule" {
-  listener_arn = aws_lb_listener.front_end.arn
-  priority     = 100
+// create alb listener 
+resource "aws_lb_listener" "example_listener" {
+  load_balancer_arn = aws_lb.example_alb.arn
+  port              = 80
+  protocol          = "HTTP"
 
-  action {
-    type             = "forward"
+  default_action {
     target_group_arn = aws_lb_target_group.example_target_group.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/"]
-    }
+    type             = "forward"
   }
 }
+
 
 resource "aws_security_group" "allow_inbound_vpc_http" {
   name        = "allow_inbound_vpc_http"

@@ -12,8 +12,9 @@ module "service" {
 // Now we can create a private link to share the service with other accounts
 
 module "priavate-link" {
-  source = "./private-link"
-  vpc_id = module.vpc.vpc_id
+  source     = "./private-link"
+  depends_on = [module.service]
+  vpc_id     = module.vpc.vpc_id
   security_groups = [
     module.vpc.default_security_group_id
   ]
