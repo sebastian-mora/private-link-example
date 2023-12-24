@@ -1,7 +1,7 @@
 
 // create network load balancer to front an alb 
 resource "aws_alb" "network" {
-  name               = "example-nlb"
+  name               = "hello-world-nlb"
   internal           = true
   load_balancer_type = "network"
   subnets            = var.subnet_ids
@@ -12,8 +12,8 @@ resource "aws_alb" "network" {
 }
 
 // create target group
-resource "aws_lb_target_group" "alb" {
-  name        = "alb-tg"
+resource "aws_lb_target_group" "target-hello-world-alb" {
+  name        = "target-hello-world-alb"
   target_type = "alb"
   port        = 80
   protocol    = "TCP"
@@ -21,8 +21,8 @@ resource "aws_lb_target_group" "alb" {
 }
 
 // register alb to target group
-resource "aws_lb_target_group_attachment" "alb" {
-  target_group_arn = aws_lb_target_group.alb.arn
+resource "aws_lb_target_group_attachment" "target-hello-world-alb" {
+  target_group_arn = aws_lb_target_group.target-hello-world-alb.arn
   target_id        = var.alb_arn
   port             = 80
 }

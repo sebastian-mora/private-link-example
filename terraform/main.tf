@@ -22,10 +22,8 @@ module "priavate-link" {
   subnet_ids = module.vpc.private_subnets
 
   allowed_principals = [
-    "arn:aws:iam::123456789012:root",
-    "arn:aws:iam::210987654321:root"
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
   ]
-
 }
 
 output "private_link_service_name" {
