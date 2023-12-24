@@ -2,6 +2,9 @@ provider "aws" {
   region = "us-east-1" # Change this to your desired AWS region
 }
 
+// lookup the current account id
+data "aws_caller_identity" "current" {}
+
 // create a mock service fronted by an internal ALB
 module "service" {
   source     = "./service"

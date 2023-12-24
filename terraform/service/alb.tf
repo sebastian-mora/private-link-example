@@ -13,8 +13,6 @@ resource "aws_lb" "hello_world" {
   }
 }
 
-
-
 // create target group
 resource "aws_lb_target_group" "hello_world" {
   name     = "hello-world-tg"
@@ -30,7 +28,7 @@ resource "aws_lb_target_group" "hello_world" {
 // register instance to target group
 resource "aws_lb_target_group_attachment" "hello_world" {
   target_group_arn = aws_lb_target_group.hello_world.arn
-  target_id        = aws_instance.example_instance.id
+  target_id        = aws_instance.hello_world.id
   port             = 80
 }
 

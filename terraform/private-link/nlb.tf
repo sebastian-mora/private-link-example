@@ -35,20 +35,8 @@ resource "aws_lb_listener" "alb" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.alb.arn
+    target_group_arn = aws_alb.network.arn
   }
 }
 
-// add security group to allow traffic on 80
-resource "aws_security_group" "allow_inbound_vpc_http" {
-  name        = "allow_inbound_vpc_http"
-  description = "Allow traffic on 80"
-  vpc_id      = var.vpc_id
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.vpc.cidr_block]
-  }
-}

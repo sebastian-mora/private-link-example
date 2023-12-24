@@ -21,7 +21,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "hello_world" {
   ami                    = data.aws_ami.ubuntu.image_id
   instance_type          = "t2.micro" # Change the instance type if needed
-  vpc_security_group_ids = [aws_security_group.allow_inbound_vpc.id]
+  vpc_security_group_ids = [aws_security_group.allow_inbound_80_self.id]
   subnet_id              = var.subnet_ids[0]
 
   user_data = <<-EOF
